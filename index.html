@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Video Saver</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background-color: #0b0f19; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 max-w-md mx-auto">
+
+    <!-- Шапка -->
+    <header class="text-center py-4">
+        <h1 class="text-2xl font-bold text-cyan-400">⚡ Fast Video Saver</h1>
+        <p class="text-xs text-gray-400 mt-1">Скачивание видео и музыки в 1 клик</p>
+    </header>
+
+    <!-- Вкладки / Основной контент -->
+    <main class="space-y-4 my-auto">
+        <!-- Блок скачивания видео -->
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-2xl shadow-lg">
+            <h2 class="text-sm font-semibold text-gray-300 mb-2">🎬 Скачать видео</h2>
+            <input type="text" id="videoUrlInput" placeholder="Вставьте ссылку на YouTube, TikTok, Reels..." 
+                   class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 mb-3">
+            <button onclick="sendVideo()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-gray-950 font-bold py-2.5 rounded-xl transition text-sm">
+                Отправить в бот 📥
+            </button>
+        </div>
+
+        <!-- Блок поиска музыки -->
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-2xl shadow-lg">
+            <h2 class="text-sm font-semibold text-gray-300 mb-2">🎵 Найти музыку</h2>
+            <input type="text" id="musicQueryInput" placeholder="Например: Miyagi - Патрон" 
+                   class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 mb-3">
+            <button onclick="sendMusicSearch()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-gray-950 font-bold py-2.5 rounded-xl transition text-sm">
+                Найти треки 🔍
+            </button>
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="text-center py-3 text-xs text-gray-500">
+        Fast Video Saver Mini App &copy; 2026
+    </footer>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        function sendDataToBot(dataObj) {
+            // Проверяем, запущен ли мини-апп внутри Telegram
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+                window.Telegram.WebApp.sendData(JSON.stringify(dataObj));
+            } else {
+                alert("⚠️ Ошибка: откройте этот Mini App внутри Telegram через бота, а не в обычном браузере!");
+            }
+        }
+
+        function sendVideo() {
+            const url = document.getElementById('videoUrlInput').value.trim();
+            if (!url) {
+                alert("Пожалуйста, введите ссылку на видео!");
+                return;
+            }
+            sendDataToBot({
+                action: "download_video",
+                url: url
+            });
+        }
+
+        function sendMusicSearch() {
+            const query = document.getElementById('musicQueryInput').value.trim();
+            if (!query) {
+                alert("Пожалуйста, введите название песни или исполнителя!");
+                return;
+            }
+            sendDataToBot({
+                action: "search_music",
+                query: query
+            });
+        }
+    </script>
+</body>
+</html>
