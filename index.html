@@ -55,11 +55,11 @@
         tg.expand();
 
         function sendDataToBot(dataObj) {
-            // Проверяем, запущен ли мини-апп внутри Telegram
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+            // Проверяем, что приложение запущено именно внутри Telegram (есть объект WebApp)
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
                 window.Telegram.WebApp.sendData(JSON.stringify(dataObj));
             } else {
-                alert("⚠️ Ошибка: откройте этот Mini App внутри Telegram через бота, а не в обычном браузере!");
+                alert("⚠️ Ошибка: откройте этот Mini App внутри Telegram через бота!");
             }
         }
 
